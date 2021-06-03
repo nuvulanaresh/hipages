@@ -1,0 +1,17 @@
+from pyspark.sql.types import *
+from pyspark.sql.functions import col,split
+jsonpath="/FileStore/tables/source_event_data.json"
+hirawdf=(spark.read
+      .option("inferSchema","true")
+      .option("header","false")
+      .json(jsonpath)
+      .select("event_id","user.session_id","user.id","user.ip","action","url","timestamp")
+      .drop("event_id","session_id","ip")
+      #.withColumn("url_level1",col("url").split("/").select("url[0]"))
+      .withColumn("url_level1",split(("url"),"/").getItem(2))
+      .withColumn("url_level2",split(("url"),"/").getItem(3))
+      .withColumn("url_level3",split(("url"),"/").getItem(3))
+       
+      #.select("url[0]")
+      .show(5,False)
+      )
