@@ -1,0 +1,6 @@
+timebktdf=(urldf
+           .withColumn("timebucket", from_unixtime(unix_timestamp(col("time_stamp"), "MM/dd/yyyy HH:mm:ss"), "yyyyMMddHH"))
+           .groupBy("timebucket","url_level1","url_level2","activity")
+           .agg(count("activity"),countDistinct("user_id"))
+          )
+timebktdf.show(50,False)
