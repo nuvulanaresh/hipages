@@ -41,6 +41,8 @@ cd /home/jovyan/work
 9.Once the pipeline is completed. You will see two folders created @ /home/jovyan/work. 
 
 10.Directories user_activity and hrly_granular_activity have the required csv datasets as requested in the requirements. 
+11.Stop the docker container using below command
+docker stop <CONTAINER_ID>
 
 **Design Choices**
 
