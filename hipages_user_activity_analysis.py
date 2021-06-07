@@ -12,7 +12,7 @@ spark=SparkSession\
     .appName("hipages_process_json")\
     .getOrCreate()
 
-# Input path for the data source
+#Input path for the data source
 jsonpath="/home/jovyan/work/source_event_data.json"
 
 # Define Schema for the json data source
@@ -31,9 +31,12 @@ jsonschema = StructType([
 user_activity_df = (spark.read\
     #Header set to false as there is no header for the data source
     .option("header","false")\
-    #Inferring Schema from the schema created above
+    #Handle corrupt records. Other options such as FAILFAST,columnNameOfCorruptRecord,PERMISSIVE can also be used based on requirement
+    .option("mode", "DROPMALFORMED")\
+    #Infer Schema from the schema created above
     .schema(jsonschema)\
     .json(jsonpath)
+    #Rename columns
     .select(col("event_id"),col("user.id").alias("user_id"),col("action").alias("activity"),"url",col("timestamp").alias("time_stamp"))\
     #Below transformations extract the desired data from the URL column
     .withColumn("url_level1",concat(split(("url"),'\\.').getItem(1),lit('.'),split(("url"),'\\.').getItem(2)))\
@@ -50,7 +53,7 @@ user_activity_df.write\
     .mode("overwrite")\
     .csv("/home/jovyan/work/user_activity")
 
-# Create DataFrame and calculate the hourly user activity
+#Create DataFrame and calculate the hourly user activity
 hrly_granular_activity_df = (user_activity_df\
     .withColumn("time_bucket", from_unixtime(unix_timestamp(col("time_stamp"), "MM/dd/yyyy HH:mm:ss"), "yyyyMMddHH"))\
     .groupBy("time_bucket","url_level1","url_level2","activity")\
