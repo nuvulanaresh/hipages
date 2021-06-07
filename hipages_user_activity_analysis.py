@@ -13,7 +13,7 @@ spark=SparkSession\
     .getOrCreate()
 
 # Input path for the data source
-jsonpath="/home/jovyan/source_event_data.json"
+jsonpath="/home/jovyan/work/source_event_data.json"
 
 # Define Schema for the json data source
 jsonschema = StructType([
@@ -48,17 +48,18 @@ user_activity_df.write\
     .option("header","true")\
     .option("sep",",")\
     .mode("overwrite")\
-    .csv("/home/jovyan/user_activity")
+    .csv("/home/jovyan/work/user_activity")
 
 # Create DataFrame and calculate the hourly user activity
 hrly_granular_activity_df = (user_activity_df\
     .withColumn("time_bucket", from_unixtime(unix_timestamp(col("time_stamp"), "MM/dd/yyyy HH:mm:ss"), "yyyyMMddHH"))\
     .groupBy("time_bucket","url_level1","url_level2","activity")\
     .agg(count("activity").alias("activity_count"),countDistinct("user_id").alias("user_count"))
+    .sort("time_bucket","url_level1","url_level2","activity")
     )
 #Write the hourly user activity to the csv
 hrly_granular_activity_df.write\
     .option("header","true")\
     .option("sep",",")\
     .mode("overwrite")\
-    .csv("/home/jovyan/hrly_granular_activity")
+    .csv("/home/jovyan/work/hrly_granular_activity")
