@@ -41,3 +41,13 @@ cd /home/jovyan/work
 9.Once the pipeline is completed. You will see two folders created @ /home/jovyan/work. 
 
 10.Directories user_activity and hrly_granular_activity have the required csv datasets as requested in the requirements. 
+
+**Design Choices**
+I have been a fan of Docker ever since it came into limelight. The ease with which you develop, test and ship code to production is phenomenal. 
+Although Spark provides a local execution mode, the most effective way to create test and pre-prod environment that is more like a production cluster environment is to use Docker containers. 
+In this use case, I have used an existing Docker Image packaged with Apache Spark (local mode). The focus was mainly building an entire data pipeline end-end which could be deployed with minimum effort in production(after performance testing). There are other Docker Images which can spin up a Spark cluster with driver and executor nodes via containers. This type of set up can be used to benchmark the performance of the pipeline. 
+
+**Thought process for benchmarking performance**
+To test the performance limits, my idea is to create a python log generator script which continuously generates json events with dynamic values up to GB's of events.Once we start testing the data pipeline with GB's if not TB's of data , we may come across performance bottlenecks with wide transformations like groupBy().
+
+If the json events are streaming, the combination of distributed stream processing frameworks like Apacha Kafka with multiple brokers and Apache Spark's streaming library can provide a low latency and high throughput platform
