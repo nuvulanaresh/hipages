@@ -1,7 +1,7 @@
-</b>Introduction:</b>  
+**Introduction:**
 This Apache Spark build pipeline processes data of user activity from one of the highly visted websites. The source data consists of user activity on website and the most frequently visited places. 
 
-Prerequisite.  
+**Prerequisite** : 
 Docker installed
 
 Below steps explain how to execute the Python data pipeline.  
