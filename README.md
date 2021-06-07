@@ -12,8 +12,10 @@ docker run -p 8888:8888 jupyter/pyspark-notebook (may take some time for image t
 2.In another new command line session, clone the git repo or download the zip file. 
 https://github.com/nuvulanaresh/hipages.git
 
-3.Copy the source_event_data.json and the build python file from the git repo to the docker container. 
+3.Copy the source_event_data.json and hipages_user_activity_analysis.py from git repo to the docker container. 
+
 docker cp hipages/hipages_user_activity_analysis.py d9a9805c40af:/home/jovyan/work
+
 docker cp source_event_data.json d9a9805c40af:/home/jovyan/work
 
 4.Below command will show you all the running containers with CONTAINER ID.  
@@ -29,10 +31,13 @@ jovyan@d9a9805c40af:~$ pwd
 /home/jovyan
 
 7.Go to below directory in the container. 
+
 cd /home/jovyan/work
 
 8.Execute below command to trigger the data pipeline. 
+
 /usr/local/spark/bin/spark-submit hipages_user_activity_analysis.py
 
 9.Once the pipeline is completed. You will see two folders created @ /home/jovyan/work. 
-10.Directories user activity and hrly_granular_activity have the required csv datasets as requested in the requirements. 
+
+10.Directories user_activity and hrly_granular_activity have the required csv datasets as requested in the requirements. 
