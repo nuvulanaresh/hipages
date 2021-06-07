@@ -12,14 +12,14 @@ docker run -p 8888:8888 jupyter/pyspark-notebook (may take some time for image t
 2.In another new command line session, clone the git repo or download the zip file. 
 https://github.com/nuvulanaresh/hipages.git
 
-3.Copy the source_event_data.json and hipages_user_activity_analysis.py from git repo to the docker container. 
-
-docker cp hipages/hipages_user_activity_analysis.py d9a9805c40af:/home/jovyan/work
-
-docker cp source_event_data.json d9a9805c40af:/home/jovyan/work
-
-4.Below command will show you all the running containers with CONTAINER ID.  
+3.Below command will show you all the running containers with CONTAINER ID.  
 docker container ls
+
+4.Copy the source_event_data.json and hipages_user_activity_analysis.py from git repo to the docker container. 
+
+docker cp ./hipages-main/hipages_user_activity_analysis.py d9a9805c40af:/home/jovyan/work
+
+docker cp ./hipages-main/source_event_data.json d9a9805c40af:/home/jovyan/work
  
 5.Use the CONTAINER ID to attach to the bash shell inside the container. 
 docker exec -it <CONTAINER_ID> bash
@@ -41,7 +41,9 @@ cd /home/jovyan/work
 9.Once the pipeline is completed. You will see two folders created @ /home/jovyan/work. 
 
 10.Directories user_activity and hrly_granular_activity have the required csv datasets as requested in the requirements. 
-11.Stop the docker container using below command
+
+11.Stop the docker container using below command. 
+
 docker stop <CONTAINER_ID>
 
 **Design Choices**
